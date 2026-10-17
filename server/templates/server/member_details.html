@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Member details</title>
+  <style>
+    body { font:16px system-ui,sans-serif; background:#17131d; color:#f4eee5; max-width:900px; margin:40px auto; padding:24px; }
+    main { background:#241b2b; padding:28px; border-radius:12px; }
+    input,select { box-sizing:border-box; width:100%; padding:10px; margin-top:5px; }
+    p { margin:14px 0; } .member { border-top:1px solid #716978; padding:12px 0; }
+    button { padding:10px 16px; margin:8px 8px 8px 0; cursor:pointer; }
+  </style>
+</head>
+<body><main>
+  <h1>Team member details</h1>
+  <form method="post" id="registration-form">
+    {% csrf_token %}
+    <h2>Team leader</h2>
+    {{ leader_form.non_field_errors }}
+    {{ leader_form.as_p }}
+
+    <h2>Members</h2>
+    {{ member_formset.management_form }}
+    {{ member_formset.non_form_errors }}
+    <div id="members">
+      {% for form in member_formset %}
+        <section class="member">
+          {{ form.as_p }}
+          <button type="button" class="remove-member">Remove member</button>
+        </section>
+      {% endfor %}
+    </div>
+
+    <template id="empty-member-form">
+      <section class="member">
+        {{ member_formset.empty_form.as_p }}
+        <button type="button" class="remove-member">Remove member</button>
+      </section>
+    </template>
+    <button type="button" id="add-member">+ Add member</button>
+    <p><a href="{% url 'register_team' %}" style="color:inherit">Back to team details</a></p>
+    <button type="submit">Submit registration →</button>
+  </form>
+
+  <script>
+    const prefix = "members";
+    const memberList = document.getElementById("members");
+    const totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+
+    document.getElementById("add-member").addEventListener("click", () => {
+      const index = Number(totalForms.value);
+      const html = document.getElementById("empty-member-form").innerHTML
+        .replaceAll(`${prefix}-__prefix__`, `${prefix}-${index}`);
+      memberList.insertAdjacentHTML("beforeend", html);
+      totalForms.value = index + 1;
+    });
+
+    memberList.addEventListener("click", (event) => {
+      if (!event.target.classList.contains("remove-member")) return;
+      const section = event.target.closest(".member");
+      const deleteInput = section.querySelector('input[name$="-DELETE"]');
+      if (deleteInput) {
+        deleteInput.checked = true;
+        section.hidden = true;
+      }
+    });
+  </script>
+</main></body>
+</html>

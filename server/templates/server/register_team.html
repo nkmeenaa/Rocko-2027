@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Team registration</title>
+  <style>
+    body { font: 16px system-ui, sans-serif; background:#17131d; color:#f4eee5; max-width:720px; margin:40px auto; padding:24px; }
+    main { background:#241b2b; padding:28px; border-radius:12px; }
+    input, select { box-sizing:border-box; width:100%; padding:10px; margin-top:5px; }
+    p { margin:16px 0; } .counts { display:grid; grid-template-columns:1fr 1fr; gap:0 20px; }
+    button { padding:11px 18px; cursor:pointer; }
+  </style>
+</head>
+<body><main>
+  <h1>Team details</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="counts">
+      {% for field in form %}
+        <p>{{ field.label_tag }} {{ field }} {{ field.errors }}</p>
+      {% endfor %}
+    </div>
+    <button type="submit">Continue to member details →</button>
+  </form>
+</main></body>
+</html>

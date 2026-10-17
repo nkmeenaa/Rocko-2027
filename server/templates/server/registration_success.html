@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registration submitted</title>
+  <style>
+    body { font:16px system-ui,sans-serif; background:#17131d; color:#f4eee5; max-width:720px; margin:40px auto; padding:24px; }
+    main { background:#241b2b; padding:28px; border-radius:12px; }
+  </style>
+</head>
+<body><main>
+  <h1>Registration submitted</h1>
+  <p>Thanks! Team <strong>{{ team.name }}</strong> and its members have been saved.</p>
+  <a href="{% url 'register_team' %}" style="color:inherit">Register another team</a>
+</main></body>
+</html>
