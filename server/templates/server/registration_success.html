@@ -1,17 +1,38 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Registration submitted</title>
-  <style>
-    body { font:16px system-ui,sans-serif; background:#17131d; color:#f4eee5; max-width:720px; margin:40px auto; padding:24px; }
-    main { background:#241b2b; padding:28px; border-radius:12px; }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{% static 'server/member-details.css' %}">
 </head>
-<body><main>
-  <h1>Registration submitted</h1>
-  <p>Thanks! Team <strong>{{ team.name }}</strong> and its members have been saved.</p>
-  <a href="{% url 'register_team' %}" style="color:inherit">Register another team</a>
-</main></body>
+<body class="min-h-screen bg-[#1d1524] text-[#f5eee3] antialiased">
+  <main class="mx-auto min-h-screen w-full max-w-[1100px] px-6 py-6 sm:px-[84px] sm:py-8 lg:px-0 lg:py-8">
+    <div class="progress mx-auto mb-3 grid max-w-[865px] grid-cols-2" aria-label="Registration progress">
+      <div class="progress-step complete relative">
+        <span class="progress-number grid h-[30px] w-[34px] place-items-center bg-[#398c34] text-xl">✓</span>
+        <span class="progress-label mt-2 block text-sm font-black">TEAM DETAILS</span>
+      </div>
+      <div class="progress-step active relative">
+        <span class="progress-number grid h-[30px] w-[34px] place-items-center bg-[#398c34] text-xl">✓</span>
+        <span class="progress-label mt-2 block text-sm font-black">TEAM MEMBER DETAILS</span>
+      </div>
+    </div>
+    <hr class="mx-auto mb-10 max-w-[865px] border-0 border-t border-[#443b49]">
+
+    <section class="mx-auto max-w-[865px] py-8 text-center sm:py-16">
+      <div class="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-full bg-[#398c34] text-4xl" aria-hidden="true">✓</div>
+      <p class="mb-2 text-sm font-black tracking-widest text-[#aaa3ad]">REGISTRATION COMPLETE</p>
+      <h1 class="mb-4 text-3xl font-semibold sm:text-4xl">Registration submitted</h1>
+      <p class="mx-auto max-w-xl text-base leading-7 text-[#c8c0ca]">
+        Thanks! <strong class="font-semibold text-[#f5eee3]">{{ team.name }}</strong> and its members have been saved.
+      </p>
+      <a href="{% url 'register_team' %}" class="submit-button mt-8 inline-flex max-w-full items-center justify-center gap-3 bg-[#eee7dd] px-4 py-2 text-sm font-semibold text-[#17131a]">
+        Register another team <span class="text-xl leading-none" aria-hidden="true">→</span>
+      </a>
+    </section>
+  </main>
+</body>
 </html>

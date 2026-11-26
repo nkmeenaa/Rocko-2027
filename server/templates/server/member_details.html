@@ -1,52 +1,118 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Member details</title>
-  <style>
-    body { font:16px system-ui,sans-serif; background:#17131d; color:#f4eee5; max-width:900px; margin:40px auto; padding:24px; }
-    main { background:#241b2b; padding:28px; border-radius:12px; }
-    input,select { box-sizing:border-box; width:100%; padding:10px; margin-top:5px; }
-    p { margin:14px 0; } .member { border-top:1px solid #716978; padding:12px 0; }
-    button { padding:10px 16px; margin:8px 8px 8px 0; cursor:pointer; }
-  </style>
+  <title>Team member details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{% static 'server/member-details.css' %}">
 </head>
-<body><main>
-  <h1>Team member details</h1>
-  <form method="post" id="registration-form">
-    {% csrf_token %}
-    <h2>Team leader</h2>
-    {{ leader_form.non_field_errors }}
-    {{ leader_form.as_p }}
-
-    <h2>Members</h2>
-    {{ member_formset.management_form }}
-    {{ member_formset.non_form_errors }}
-    <div id="members">
-      {% for form in member_formset %}
-        <section class="member">
-          {{ form.as_p }}
-          <button type="button" class="remove-member">Remove member</button>
-        </section>
-      {% endfor %}
+<body class="min-h-screen bg-[#1d1524] text-[#f5eee3] antialiased">
+  <main class="mx-auto min-h-screen w-full max-w-[1100px] px-6 py-6 sm:px-[84px] sm:py-8 lg:px-0 lg:py-8">
+    <div class="progress mx-auto mb-3 grid max-w-[865px] grid-cols-2" aria-label="Registration progress">
+      <div class="progress-step complete relative">
+        <span class="progress-number grid h-[30px] w-[34px] place-items-center bg-[#398c34] text-xl">✓</span>
+        <span class="progress-label mt-2 block text-sm font-black">TEAM DETAILS</span>
+      </div>
+      <div class="progress-step active relative">
+        <span class="progress-number grid h-[30px] w-[34px] place-items-center bg-[#eee7dd] text-xl font-bold text-[#17131a]">2</span>
+        <span class="progress-label mt-2 block text-sm font-black">TEAM MEMBER DETAILS</span>
+      </div>
     </div>
+    <hr class="mx-auto mb-10 max-w-[865px] border-0 border-t border-[#443b49]">
 
-    <template id="empty-member-form">
-      <section class="member">
-        {{ member_formset.empty_form.as_p }}
-        <button type="button" class="remove-member">Remove member</button>
+    <form method="post" id="registration-form" class="mx-auto max-w-[865px]">
+      {% csrf_token %}
+      {{ leader_form.non_field_errors }}
+      {{ member_formset.management_form }}
+      {{ member_formset.non_form_errors }}
+
+      <section class="mb-6">
+        <h1 class="mb-2 text-lg font-semibold">Team Leader Detail</h1>
+        <div class="fields-grid grid grid-cols-1 gap-x-14 gap-y-2 md:grid-cols-2">
+          {% for field in leader_form %}
+            <div class="field-wrap">
+              {{ field.label_tag }}
+              {{ field }}
+              {% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
       </section>
-    </template>
-    <button type="button" id="add-member">+ Add member</button>
-    <p><a href="{% url 'register_team' %}" style="color:inherit">Back to team details</a></p>
-    <button type="submit">Submit registration →</button>
-  </form>
+
+      <div id="members" class="space-y-0">
+        {% for form in member_formset %}
+          <section class="member-section" data-member>
+            <h2 class="member-heading mb-2 text-lg font-semibold">Team Member Detail</h2>
+            {{ form.non_field_errors }}
+            <div class="fields-grid grid grid-cols-1 gap-x-14 gap-y-2 md:grid-cols-2">
+              {% for field in form %}
+                {% if field.name != "DELETE" %}
+                  <div class="field-wrap {% if field.name == 'instrument' %}instrument-field{% endif %}">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}
+                  </div>
+                {% else %}{{ field }}{% endif %}
+              {% endfor %}
+            </div>
+            <button type="button" class="remove-member mt-2 text-xs text-[#aaa3ad] underline">Remove member</button>
+          </section>
+        {% endfor %}
+      </div>
+
+      <template id="empty-member-form">
+        <section class="member-section" data-member>
+          <h2 class="member-heading mb-2 text-lg font-semibold">Team Member Detail</h2>
+          <div class="fields-grid grid grid-cols-1 gap-x-14 gap-y-2 md:grid-cols-2">
+            {% for field in member_formset.empty_form %}
+              {% if field.name != "DELETE" %}
+                <div class="field-wrap {% if field.name == 'instrument' %}instrument-field{% endif %}">
+                  {{ field.label_tag }}{{ field }}
+                </div>
+              {% else %}{{ field }}{% endif %}
+            {% endfor %}
+          </div>
+          <button type="button" class="remove-member mt-2 text-xs text-[#aaa3ad] underline">Remove member</button>
+        </section>
+      </template>
+
+      <div class="mt-5 flex flex-wrap items-center justify-end gap-4">
+        <button type="button" id="add-member" class="mr-auto text-sm text-[#d7cfd9] underline">+ Add member</button>
+        <a href="{% url 'register_team' %}" class="back-button inline-flex items-center gap-2 border border-[#eee7dd] px-4 py-2 text-sm font-medium text-[#eee7dd]"><span aria-hidden="true">←</span> Back</a>
+        <button type="submit" class="submit-button inline-flex items-center gap-3 bg-[#eee7dd] px-4 py-2 text-sm font-semibold text-[#17131a]">Submit <span class="text-xl leading-none" aria-hidden="true">→</span></button>
+      </div>
+    </form>
+  </main>
 
   <script>
     const prefix = "members";
     const memberList = document.getElementById("members");
     const totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+
+    function updateMemberHeadings() {
+      memberList.querySelectorAll("[data-member]").forEach((section) => {
+        const instrument = section.querySelector('select[name$="-instrument"]');
+        const heading = section.querySelector(".member-heading");
+        if (!instrument || !heading) return;
+        const label = instrument.options[instrument.selectedIndex]?.text || "Team Member";
+        const sameInstrument = [...memberList.querySelectorAll('select[name$="-instrument"]')]
+          .filter((select) => select.value === instrument.value && select.closest("[data-member]").hidden !== true);
+        heading.textContent = `${label} ${sameInstrument.indexOf(instrument) + 1} Detail`;
+      });
+    }
+
+    function hideDeletedMember(section) {
+      const deleteInput = section.querySelector('input[name$="-DELETE"]');
+      if (!deleteInput) return;
+
+      deleteInput.checked = true;
+      section.querySelectorAll("input, select, textarea, button").forEach((control) => {
+        if (control !== deleteInput) control.disabled = true;
+      });
+      section.hidden = true;
+    }
 
     document.getElementById("add-member").addEventListener("click", () => {
       const index = Number(totalForms.value);
@@ -54,17 +120,23 @@
         .replaceAll(`${prefix}-__prefix__`, `${prefix}-${index}`);
       memberList.insertAdjacentHTML("beforeend", html);
       totalForms.value = index + 1;
+      updateMemberHeadings();
     });
 
+    memberList.addEventListener("change", (event) => {
+      if (event.target.matches('select[name$="-instrument"]')) updateMemberHeadings();
+    });
     memberList.addEventListener("click", (event) => {
       if (!event.target.classList.contains("remove-member")) return;
-      const section = event.target.closest(".member");
-      const deleteInput = section.querySelector('input[name$="-DELETE"]');
-      if (deleteInput) {
-        deleteInput.checked = true;
-        section.hidden = true;
-      }
+      const section = event.target.closest(".member-section");
+      hideDeletedMember(section);
+      updateMemberHeadings();
     });
+    memberList.querySelectorAll("[data-member]").forEach((section) => {
+      const deleteInput = section.querySelector('input[name$="-DELETE"]');
+      if (deleteInput?.checked) hideDeletedMember(section);
+    });
+    updateMemberHeadings();
   </script>
-</main></body>
+</body>
 </html>

@@ -37,7 +37,9 @@ class TeamLeaderForm(forms.ModelForm):
         fields = ["leader_name", "leader_phone", "leader_email", "leader_gender"]
         widgets = {
             "leader_name": forms.TextInput(attrs={"placeholder": "Leader Name"}),
-            "leader_phone": forms.TelInput(attrs={"placeholder": "Phone Number"}),
+            "leader_phone": forms.TextInput(
+                attrs={"type": "tel", "placeholder": "Phone Number"}
+            ),
             "leader_email": forms.EmailInput(attrs={"placeholder": "Email"}),
             "leader_gender": forms.Select(attrs={"placeholder": "Select Gender"}),
         }
@@ -51,7 +53,9 @@ class TeamMemberForm(forms.ModelForm):
         fields = ["name", "phone", "email", "gender", "instrument"]
         widgets = {
             "name": forms.TextInput(attrs={"placeholder": "Name"}),
-            "phone": forms.TelInput(attrs={"placeholder": "Phone Number"}),
+            "phone": forms.TextInput(
+                attrs={"type": "tel", "placeholder": "Phone Number"}
+            ),
             "email": forms.EmailInput(attrs={"placeholder": "Email"}),
             "gender": forms.Select(attrs={"placeholder": "Select Gender"}),
             "instrument": forms.Select(),
