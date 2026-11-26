@@ -1,6 +1,7 @@
 from django.db import models
-from django.core.validators import RegexValidator, MinValueValidator,EmailValidator
+from django.core.validators import MinValueValidator, EmailValidator
 from django.utils import timezone
+from phonenumber_field.modelfields import PhoneNumberField
 # Create your models here.
 #Nitin's Code
 GENDER_CHOICES = [
@@ -16,10 +17,6 @@ ROLE_CHOICES = [
     ('Vocalist', 'Vocalist'),
     ('Other', 'Other'),
 ]
-phone_validator = RegexValidator(
-    regex=r'^[6-9]\d{9}$',
-    message='Enter a valid 10-digit mobile number.',
-)
 email_validator = EmailValidator(
     message='Enter a valid email address.',
 )
@@ -29,10 +26,7 @@ class Team(models.Model):
   performance_link = models.URLField(blank=True, null=True)
 
   leader_name = models.CharField(max_length=100)
-  leader_phone = models.CharField(
-    max_length=10,
-    validators=[phone_validator],
-    )
+  leader_phone = PhoneNumberField()
   leader_email = models.EmailField(validators=[email_validator])
   leader_gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
 
@@ -65,7 +59,7 @@ class TeamMembers(models.Model):
       related_name = "members",
     )
     name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=10, validators=[phone_validator])
+    phone = PhoneNumberField()
     email = models.EmailField(validators=[email_validator])
     gender = models.CharField(max_length=20, choices=Gender.choices)
     instrument = models.CharField(max_length=10, choices=Instrument.choices)
