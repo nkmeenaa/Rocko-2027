@@ -1,9 +1,23 @@
+from pathlib import Path
+
 from django.db import transaction
 from django.forms import formset_factory
+from django.http import FileResponse, Http404
 from django.shortcuts import redirect, render
 
 from .forms import TeamDetailsForm, TeamLeaderForm, TeamMemberForm
 from .models import Team, TeamMembers
+
+
+# Landing page: the React build (frontend/ → `npm run build`) writes its index.html here
+LANDING_INDEX = Path(__file__).resolve().parent / "static" / "landing" / "index.html"
+
+
+def landing(request):
+    """Serve the Rock-o-Phonix landing page (React build) at "/"."""
+    if not LANDING_INDEX.exists():
+        raise Http404("Landing page not built yet: run `npm run build` in frontend/")
+    return FileResponse(open(LANDING_INDEX, "rb"), content_type="text/html; charset=utf-8")
 
 
 TeamMemberFormSet = formset_factory(
