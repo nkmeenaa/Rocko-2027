@@ -64,6 +64,9 @@ class TeamMemberForm(forms.ModelForm):
     """Details for one band member; the view supplies the team relationship."""
 
     phone = InternationalPhoneNumberField(region="IN")
+    instrument = forms.ChoiceField(
+        choices=[("", "Select instrument"), *TeamMembers.Instrument.choices]
+    )
 
     class Meta:
         model = TeamMembers

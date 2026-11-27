@@ -16,7 +16,7 @@ body { min-height:100vh; min-height:100svh; font-family: Inter, ui-sans-serif, s
 .field-wrap select { appearance:none; padding-right:30px; color:#a59eaa; }
 .field-wrap select option { background:#1d1524; color:#f5eee3; }
 .field-wrap:has(select)::after { content:""; position:absolute; right:7px; top:13px; width:9px; height:9px; border-right:2px solid #f5eee3; border-bottom:2px solid #f5eee3; transform:rotate(45deg); pointer-events:none; }
-.field-wrap.instrument-field, input[name$="-DELETE"] { display:none !important; }
+input[name$="-DELETE"] { display:none !important; }
 .field-errors, .errorlist { margin-top:5px; color:#ffaaa9; font-size:13px; list-style:none; }
 .submit-button, .back-button { min-height:39px; }
 .remove-member { cursor:pointer; }
