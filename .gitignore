@@ -1,0 +1,12 @@
+# Python / Django
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Frontend (React, in frontend/). The built site in server/static/landing/ IS committed.
+frontend/node_modules/
+frontend/dist/
+
+# OS
+.DS_Store
